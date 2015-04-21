@@ -1,0 +1,34 @@
+rdrand code taken from https://github.com/kmowery/rdrand.git
+
+Modified by Dushyant Srikant
+CSE 199 - Spring 2015
+
+1. Generate the random numbers
+2. Copy into local file and checksum (MD5)
+3. Copy file by file over to ...
+4. Create directories, __ files then make a new directory
+	-> After __ files, change write location
+
+
+Things to consider when writing the number generation logic :
+
+- The ES always shows single-bit bias, serial correlation and other
+	 small deviations from perfect randomness. If these biases
+	 are severe, they may reduce the entropy rate of the ES below
+	 acceptable levels.
+
+- The ES might take a long time to warm up, and during this time could
+	 output mostly 0s or mostly 1s until it settles on the metastable
+	 region.
+
+- The ES might become “stuck”, always outputting 0 or always outputting 1.
+
+- The ES might oscillate between 0 and 1, or in some other short pattern.
+
+- The ES might be mostly stuck in one of the preceding patterns, but
+	 occasionally deviate from it.
+
+- The ES might be influenced by an external circuit (for example, a nearby
+	 bus or the chip’s power supply) in a way that is predictable or
+	 exploitable by an attacker.
+

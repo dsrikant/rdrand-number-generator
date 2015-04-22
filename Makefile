@@ -1,6 +1,6 @@
 CC := gcc
 STRIP := strip
-CFLAGS := -O3 -std=gnu99 -Wall -Werror
+CFLAGS := -O1 -std=gnu99 -Wall -Werror
 LDFLAGS :=
 
 progs := rdrand

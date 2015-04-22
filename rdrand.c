@@ -49,7 +49,7 @@ int rdrand_fill_array(uint64_t* array, int size) {
 
 int main(int argc, char** argv) {
   struct arguments arguments;
-  arguments.block_count = 16;
+  arguments.block_count = 100;
   arguments.block_count_set = 0;
   arguments.core = -1;
   arguments.output_file = NULL;
@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
       printf("\n");
     }
   }
-
+  
   FILE* out = NULL;
   if(arguments.output_file) {
     out = fopen(arguments.output_file, "w+");
@@ -87,17 +87,17 @@ int main(int argc, char** argv) {
       exit(1);
     }
   }
-
+  
   int blocks = 0;
   int blocks_left = arguments.block_count;
   int round_blocks = 0;
-#define MAX_round_blocks 16
+#define MAX_round_blocks 100
   uint64_t array[MAX_round_blocks];
 
   while(blocks_left > 0) {
     round_blocks = (blocks_left > MAX_round_blocks) ? MAX_round_blocks : blocks_left;
     blocks = rdrand_fill_array(array, round_blocks);
-
+    
     if(blocks != round_blocks) {
       printf("rdrand round unsuccessful: %d != %d!\n", blocks, round_blocks);
     } else {
@@ -113,7 +113,6 @@ int main(int argc, char** argv) {
     }
   }
 
-  printf("After while loop\n");
   if(out) {
     fclose(out);
   }

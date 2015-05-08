@@ -38,13 +38,35 @@ def hashFile(currFile, hashValue):
 
 
 
+def recordCoreTemp():
+   f = open('/sys/class/thermal/thermal_zone0/temp');
+   temp = f.read();
+   f.close()
+   print(temp);
+
+   # write this to our log file?
+   return temp
+
 
 # Run rdrand instruction
 def newFile(ID):
-    cmd = './rdrand --size=8k --output=random_number_file_ID_' + str(ID) + '.txt'
+    # Need to remember to increase the file size here.
+    cmd = './rdrand --size=8k --output=output/random_number_file_ID_' + str(ID) + '.txt'
     os.system(cmd) # returns the exit status
-    return 'random_number_file_ID_' + str(ID)
+    return 'output/random_number_file_ID_' + str(ID)
 
+# Get size of output folder
+# http://snipplr.com/view/47686/
+def directorySize():
+  source = "output/"
+  total_size = os.path.getsize(source)
+  for item in os.listdir(source):
+    itempath = os.path.join(source, item)
+    if os.path.isfile(itempath):
+      total_size += os.path.getsize(itempath)
+    elif os.path.isdir(itempath):
+      total_size += _total_size(itempath)
+  return total_size
 
 
 # Loop "infinitely", stop at 2 for testing right now
@@ -52,41 +74,20 @@ def newFile(ID):
 def numGen():
   curr_file_ID = 0;
     #while(directory(some_path, '.txt'))
-  while(curr_file_ID < 2):
-    currFile = newFile(curr_file_ID) 
-    # This value needs to be updated as we generate bigger and bigger files
-    time.sleep(2)
-    hashFile(currFile, hashThis(currFile + '.txt'))
-    curr_file_ID += 1
-     
+  while True:
+    if(directorySize() < 100000):
+      currFile = newFile(curr_file_ID) 
+      # This value needs to be updated as we generate bigger and bigger files
+      #time.sleep(2)
+      fd = os.open( currFile, os.O_RDWR|os.O_CREAT )
+      os.fsync(fd)
+      hashFile(currFile, hashThis(currFile + '.txt'))
+      curr_file_ID += 1
+      recordCoreTemp()
+    else:
+      time.sleep(100)   
 
 
 # Call driver
 numGen()
-
-
-
-
-
-
-## Some things I was messing around with, leaving them around for now.
-
-
-# Grabbing core temp
-# Checking if this is accurate?
-# Code from ... , make any necessary modifications
-# Most likely don't need to, since it's just a diagnostic.
-# https://pypi.python.org/pypi/PySensors/
-# Doesn't work yet
-'''import sensors
-
-sensors.init()
-try:
-    for chip in sensors.iter_detected_chips():
-        print '%s at %s' % (chip, chip.adapter_name)
-        for feature in chip:
-            print '  %s: %.2f' % (feature.label, feature.get_value())
-finally:
-    sensors.cleanup()'''
-
 

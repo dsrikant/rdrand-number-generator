@@ -5,6 +5,7 @@
 import os
 import time
 import hashlib
+import datetime
 
 # Call the rdrand instruction
 # For each filename increment this counter.
@@ -32,6 +33,7 @@ def hashFile(currFile, hashValue):
     file = open(name,'w+')
     file.write(hashValue)
     file.close()
+    return name
 
   except:
     print('Something is up here')
@@ -50,6 +52,8 @@ def recordCoreTemp():
 
 # Run rdrand instruction
 def newFile(ID):
+    # For an output file with 5G of random numbers
+    # ./rdrand --size=5000000k --output=testout.txt
     # Need to remember to increase the file size here.
     cmd = './rdrand --size=8k --output=output/random_number_file_ID_' + str(ID) + '.txt'
     os.system(cmd) # returns the exit status
@@ -73,19 +77,26 @@ def directorySize():
 # Or until certain sizeof directory
 def numGen():
   curr_file_ID = 0;
-    #while(directory(some_path, '.txt'))
   while True:
-    if(directorySize() < 100000):
+    if(directorySize() < 100000): # Need a good number here, or use directory size code
+      timeBefore = datetime.datetime.now() 
       currFile = newFile(curr_file_ID) 
-      # This value needs to be updated as we generate bigger and bigger files
-      #time.sleep(2)
+      timeAfter = datetime.datetime.now() 
+      # Don't like the output of this, verify correct usage...?
       fd = os.open( currFile, os.O_RDWR|os.O_CREAT )
       os.fsync(fd)
-      hashFile(currFile, hashThis(currFile + '.txt'))
+      hashFileName = hashFile(currFile, hashThis(currFile + '.txt'))
       curr_file_ID += 1
-      recordCoreTemp()
+      coreTemp = recordCoreTemp()
+      toWrite = "Filename : " + currFile + ",  HashedFile Name : " + hashFileName\
+                + ",  CoreTemp : " + coreTemp + ",  Start Time : " + str(timeBefore)\
+                + ",  End Time : " + str(timeAfter) + "\n"
+      f = open('/home/dsrikant/rdrand-number-generator/CryptoDiagnostics.txt', "a")
+      f.write(toWrite)
+      f.close()
     else:
-      time.sleep(100)   
+      # May need to increase this number so more files can be transferred?
+      time.sleep(5)   
 
 
 # Call driver

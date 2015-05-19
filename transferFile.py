@@ -41,6 +41,10 @@ servers = ["67.58.51.135:/mnt/disk1", "67.58.51.135:/mnt/disk2"\
 
 
 def copyFile(file_to_copy, dest):
+  toWrite = "File : " + file_to_copy + " Destination : " + dest + "\n"
+  f = open('transfers.txt', "a")
+  f.write(toWrite)
+  f.close()
   send = "scp output/" + file_to_copy + " " + dest 
   os.system(send)
 
@@ -99,13 +103,17 @@ def transfer():
       for currFile in sorted(filelist):
         # Keep all our storage disks at 95 ish capacity
         # Consider using a transferred folder here?
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if int(gotRoomAgain(servers[dest])) > 95:
           dest += 1
-        if str(currFile).endswith('.txt'):
+          if dest >= len(servers):
+            sys.exit(0)
+        if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("transfers.txt").read():
+           print "Transferring File : " + str(currFile)
            copyFile(currFile, servers[dest]) 
     else:
       print "Directory is empty"
-      time.sleep(300) # Sleep for 300 seconds
+      time.sleep(60) # Sleep for 300 seconds
 
 
 # Call driver

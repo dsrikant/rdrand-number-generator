@@ -6,6 +6,7 @@ import os
 import time
 import hashlib
 import datetime
+import subprocess
 
 # Call the rdrand instruction
 # For each filename increment this counter.
@@ -55,8 +56,10 @@ def newFile(ID):
     # For an output file with 5G of random numbers
     # ./rdrand --size=5000000k --output=testout.txt
     # Need to remember to increase the file size here.
-    cmd = './rdrand --size=8k --output=output/random_number_file_ID_' + str(ID) + '.txt'
-    os.system(cmd) # returns the exit status
+    cmd = './rdrand --size=5000000k --output=output/random_number_file_ID_' + str(ID) + '.txt'
+#    os.system(cmd) # returns the exit status
+    p =subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stdin=None, stderr=subprocess.PIPE, env=os.environ, universal_newlines=True)
+    p.wait()
     return 'output/random_number_file_ID_' + str(ID)
 
 # Get size of output folder
@@ -78,7 +81,7 @@ def directorySize():
 def numGen():
   curr_file_ID = 0;
   while True:
-    if(directorySize() < 100000): # Need a good number here, or use directory size code
+    if(directorySize() < 50000000): # Need a good number here, or use directory size code
       timeBefore = datetime.datetime.now() 
       currFile = newFile(curr_file_ID) 
       timeAfter = datetime.datetime.now() 
@@ -88,7 +91,7 @@ def numGen():
       hashFileName = hashFile(currFile, hashThis(currFile + '.txt'))
       curr_file_ID += 1
       coreTemp = recordCoreTemp()
-      toWrite = "Filename : " + currFile + ",  HashedFile Name : " + hashFileName\
+      toWrite = "Filename : " + currFile + ".txt"  + ",  HashedFile Name : " + hashFileName\
                 + ",  CoreTemp : " + coreTemp + ",  Start Time : " + str(timeBefore)\
                 + ",  End Time : " + str(timeAfter) + "\n"
       f = open('/home/dsrikant/rdrand-number-generator/CryptoDiagnostics.txt', "a")
@@ -96,7 +99,7 @@ def numGen():
       f.close()
     else:
       # May need to increase this number so more files can be transferred?
-      time.sleep(5)   
+      time.sleep(70)   
 
 
 # Call driver

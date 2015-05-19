@@ -63,6 +63,6 @@ def verify():
                 os.system(remove1)
                 os.system(remove2)
                 os.system(remove3)
-                break
+            break
 
 verify()

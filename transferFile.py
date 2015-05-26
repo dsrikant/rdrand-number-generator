@@ -4,6 +4,7 @@ import random
 import glob
 import time
 import subprocess
+import hashlib
 
 # Send the file to the proper dcswitch server
 # Servers 66 to 90
@@ -12,41 +13,100 @@ import subprocess
 # Add the rest of the available file paths here...
 # 10 G connection for dcswitch 66 67.58.51.135
 
-servers = ["67.58.51.135:/mnt/disk1", "67.58.51.135:/mnt/disk2"\
-           "67.58.51.136:/mnt/disk1", "67.58.51.136:/mnt/disk2"\
-           "67.58.51.137:/mnt/disk1", "67.58.51.135:/mnt/disk2"\
-           "67.58.51.138:/mnt/disk1", "67.58.51.138:/mnt/disk2"\
-           "67.58.51.139:/mnt/disk1", "67.58.51.139:/mnt/disk2"\
-           "67.58.51.140:/mnt/disk1", "67.58.51.140:/mnt/disk2"\
-           "67.58.51.141:/mnt/disk1", "67.58.51.141:/mnt/disk2"\
-           "67.58.51.142:/mnt/disk1", "67.58.51.142:/mnt/disk2"\
-           "67.58.51.143:/mnt/disk1", "67.58.51.143:/mnt/disk2"\
-           "67.58.51.144:/mnt/disk1", "67.58.51.144:/mnt/disk2"\
-           "67.58.51.145:/mnt/disk1", "67.58.51.145:/mnt/disk2"\
-           "67.58.51.146:/mnt/disk1", "67.58.51.146:/mnt/disk2"\
-           "67.58.51.147:/mnt/disk1", "67.58.51.147:/mnt/disk2"\
-           "67.58.51.148:/mnt/disk1", "67.58.51.148:/mnt/disk2"\
-           "67.58.51.149:/mnt/disk1", "67.58.51.149:/mnt/disk2"\
-           "67.58.51.150:/mnt/disk1", "67.58.51.150:/mnt/disk2"\
-           "67.58.51.151:/mnt/disk1", "67.58.51.151:/mnt/disk2"\
-           "67.58.51.152:/mnt/disk1", "67.58.51.152:/mnt/disk2"\
-           "67.58.51.153:/mnt/disk1", "67.58.51.153:/mnt/disk2"\
-           "67.58.51.154:/mnt/disk1", "67.58.51.154:/mnt/disk2"\
-           "67.58.51.155:/mnt/disk1", "67.58.51.155:/mnt/disk2"\
-           "67.58.51.156:/mnt/disk1", "67.58.51.156:/mnt/disk2"\
-           "67.58.51.157:/mnt/disk1", "67.58.51.157:/mnt/disk2"\
-           "67.58.51.158:/mnt/disk1", "67.58.51.158:/mnt/disk2"\
-           "67.58.51.134:/mnt/disk1", "67.58.51.134:/mnt/disk2"\
-]
+servers = ["67.58.51.135:/mnt/disk1"]
+servers.append("67.58.51.135:/mnt/disk2")
+servers.append("67.58.51.136:/mnt/disk1")
+servers.append("67.58.51.136:/mnt/disk2")
+servers.append("67.58.51.137:/mnt/disk1")
+servers.append("67.58.51.135:/mnt/disk2")
+servers.append("67.58.51.138:/mnt/disk1")
+servers.append("67.58.51.138:/mnt/disk2")
+servers.append("67.58.51.139:/mnt/disk1")
+servers.append("67.58.51.139:/mnt/disk2")
+servers.append("67.58.51.140:/mnt/disk1")
+servers.append("67.58.51.140:/mnt/disk2")
+servers.append("67.58.51.141:/mnt/disk1")
+servers.append("67.58.51.141:/mnt/disk2")
+servers.append("67.58.51.142:/mnt/disk1")
+servers.append("67.58.51.142:/mnt/disk2")
+servers.append("67.58.51.143:/mnt/disk1")
+servers.append("67.58.51.143:/mnt/disk2")
+servers.append("67.58.51.144:/mnt/disk1")
+servers.append("67.58.51.144:/mnt/disk2")
+servers.append("67.58.51.145:/mnt/disk1")
+servers.append("67.58.51.145:/mnt/disk2")
+servers.append("67.58.51.146:/mnt/disk1")
+servers.append("67.58.51.146:/mnt/disk2")
+servers.append("67.58.51.147:/mnt/disk1")
+servers.append("67.58.51.147:/mnt/disk2")
+servers.append("67.58.51.148:/mnt/disk1")
+servers.append("67.58.51.148:/mnt/disk2")
+servers.append("67.58.51.149:/mnt/disk1")
+servers.append("67.58.51.149:/mnt/disk2")
+servers.append("67.58.51.150:/mnt/disk1")
+servers.append("67.58.51.150:/mnt/disk2")
+servers.append("67.58.51.151:/mnt/disk1")
+servers.append("67.58.51.151:/mnt/disk2")
+servers.append("67.58.51.152:/mnt/disk1")
+servers.append("67.58.51.152:/mnt/disk2")
+servers.append("67.58.51.153:/mnt/disk1")
+servers.append("67.58.51.153:/mnt/disk2")
+servers.append("67.58.51.154:/mnt/disk1")
+servers.append("67.58.51.154:/mnt/disk2")
+servers.append("67.58.51.155:/mnt/disk1")
+servers.append("67.58.51.155:/mnt/disk2")
+servers.append("67.58.51.156:/mnt/disk1")
+servers.append("67.58.51.156:/mnt/disk2")
+servers.append("67.58.51.157:/mnt/disk1")
+servers.append("67.58.51.157:/mnt/disk2")
+servers.append("67.58.51.158:/mnt/disk1")
+servers.append("67.58.51.158:/mnt/disk2")
+servers.append("67.58.51.134:/mnt/disk1")
+servers.append("67.58.51.134:/mnt/disk2")
 
+
+def hashThis(filename):
+  print "In hashThis"
+  func = hashlib.md5()
+  f = open(filename, 'rb')
+  try:
+    func.update(f.read())
+  finally:
+    f.close()
+  return func.digest()
+
+
+def hashFile(currFile, hashValue):
+  print "In hashFile"
+  
+  temp = currFile.split('.')
+
+  name = temp[0] + '_hashed.txt'
+
+  try:
+    print(name)
+    file = open(name,'w+')
+    file.write(hashValue)
+    file.close()
+    return name
+
+  except:
+    print "something is up here"
 
 def copyFile(file_to_copy, dest):
+  print "Copying to : " + str(dest)
+  # Hash the file then copy it over
+  hashFileName = hashFile( "output/" + file_to_copy, hashThis("output/" + file_to_copy))
+  print "HashFile name is : " + hashFileName
   toWrite = "File : " + file_to_copy + " Destination : " + dest + "\n"
   f = open('transfers.txt', "a")
   f.write(toWrite)
   f.close()
   send = "scp output/" + file_to_copy + " " + dest 
+  send2 = "scp " + hashFileName + " " + dest 
   os.system(send)
+  os.system(send2)
+  
 
 # /mnt/disk1
 # /mnt/disk2
@@ -93,10 +153,14 @@ def empty():
 
 def transfer():
   # index in server array so we can check file capacity
-  dest = 0
+  #dest = 0
+  # Move this up to 1 becasue I ahd to re start the pipeline
+  # after the first disk is full
+  #dest = 1
+  dest = 2
   while True:
     if(empty() == False):
-      print "Directory is not empty"
+#      print "Directory is not empty"
       # copyFile("random_number_file_ID_0.txt", servers[0], "/mnt/disk1")
       path = "/home/dsrikant/rdrand-number-generator/output" 
       filelist = sorted(os.listdir(path))
@@ -108,13 +172,12 @@ def transfer():
           dest += 1
           if dest >= len(servers):
             sys.exit(0)
-        if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("transfers.txt").read():
+        if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("transfers.txt").read() and "hashed" not in str(currFile):
            print "Transferring File : " + str(currFile)
            copyFile(currFile, servers[dest]) 
     else:
       print "Directory is empty"
       time.sleep(60) # Sleep for 300 seconds
-
 
 # Call driver
 transfer()

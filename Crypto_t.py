@@ -148,7 +148,7 @@ def transfer():
   	oe = 0
         if len(temp) > 1 :
           oe = int((temp[4].split('.')[0])) % 2
-        if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("HoboTransfers.txt").read() and "hashed" not in str(currFile) and oe != 0:
+        if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("HoboTransfers.txt").read() and "hashed" not in str(currFile) and oe == 0:
            print "Transferring File : " + str(currFile)
            #copyFile(currFile, servers[dest]) 
     else:

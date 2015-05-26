@@ -13,8 +13,35 @@ import hashlib
 # Add the rest of the available file paths here...
 # 10 G connection for dcswitch 66 67.58.51.135
 
-servers = ["dcswitch80:/mnt/disk1"]
-
+servers = ["67.58.51.135:/mnt/disk1"]
+servers.append("67.58.51.135:/mnt/disk2")
+servers.append("67.58.51.136:/mnt/disk1")
+servers.append("67.58.51.136:/mnt/disk2")
+servers.append("67.58.51.137:/mnt/disk1")
+servers.append("67.58.51.135:/mnt/disk2")
+servers.append("67.58.51.138:/mnt/disk1")
+servers.append("67.58.51.138:/mnt/disk2")
+servers.append("67.58.51.139:/mnt/disk1")
+servers.append("67.58.51.139:/mnt/disk2")
+servers.append("67.58.51.140:/mnt/disk1")
+servers.append("67.58.51.140:/mnt/disk2")
+servers.append("67.58.51.141:/mnt/disk1")
+servers.append("67.58.51.141:/mnt/disk2")
+servers.append("67.58.51.142:/mnt/disk1")
+servers.append("67.58.51.142:/mnt/disk2")
+servers.append("67.58.51.143:/mnt/disk1")
+servers.append("67.58.51.143:/mnt/disk2")
+servers.append("67.58.51.144:/mnt/disk1")
+servers.append("67.58.51.144:/mnt/disk2")
+servers.append("67.58.51.145:/mnt/disk1")
+servers.append("67.58.51.145:/mnt/disk2")
+servers.append("67.58.51.146:/mnt/disk1")
+servers.append("67.58.51.146:/mnt/disk2")
+servers.append("67.58.51.147:/mnt/disk1")
+servers.append("67.58.51.147:/mnt/disk2")
+servers.append("67.58.51.148:/mnt/disk1")
+servers.append("67.58.51.148:/mnt/disk2")
+servers.append("67.58.51.149:/mnt/disk1")
 servers.append("67.58.51.149:/mnt/disk2")
 servers.append("67.58.51.150:/mnt/disk1")
 servers.append("67.58.51.150:/mnt/disk2")

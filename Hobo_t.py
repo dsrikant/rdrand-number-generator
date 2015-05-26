@@ -13,8 +13,10 @@ import hashlib
 # Add the rest of the available file paths here...
 # 10 G connection for dcswitch 66 67.58.51.135
 
-servers = ["67.58.51.150:/mnt/disk1"]
+servers = ["dcswitch80:/mnt/disk1"]
 
+servers.append("67.58.51.149:/mnt/disk2")
+servers.append("67.58.51.150:/mnt/disk1")
 servers.append("67.58.51.150:/mnt/disk2")
 servers.append("67.58.51.151:/mnt/disk1")
 servers.append("67.58.51.151:/mnt/disk2")
@@ -98,7 +100,6 @@ def gotRoomAgain(destination):
   #This is the percent usage
   return arr[1][-2:]
 
-
 # Get size of output folder                                             
 # http://snipplr.com/view/47686/
 def directorySize():
@@ -144,7 +145,10 @@ def transfer():
           if dest >= len(servers):
             sys.exit(0)
         temp = currFile.split('_')
-        oe = int(temp[4]) % 2
+  	oe = 0
+        print temp
+        if len(temp) > 1 :
+          oe = int((temp[4].split('.')[0])) % 2
         if oe != 0 :
             print "Odd Baby"
         if str(currFile).endswith('.txt') and str(currFile) in open("CryptoDiagnostics.txt").read() and str(currFile) not in open("HoboTransfers.txt").read() and "hashed" not in str(currFile):

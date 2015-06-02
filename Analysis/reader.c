@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
 
     // XOR with mask and check == 0
-    int mask = 0x0000000000000001;
+    int mask = 0x0000001000000000;
     for(int i = 0; i < 128; i+=2) {
         if((arr[i]^mask) == 0)
             fprintf(f, "%" PRIx64 "%" PRIx64 "\n", arr[i], arr[i+1]);

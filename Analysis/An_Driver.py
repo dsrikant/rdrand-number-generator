@@ -36,7 +36,7 @@ def filter()
     for cf in sorted(filelist):
         #cmd = "./a.out 8_kikibytes.txt"
         # Remember to remove the verified file.
-        if "hashed" not in str(currFile)
+        if "hashed" not in str(cf)
             # Generate a file called res.txt with all the valid number
             # for our current iteration
             cmd = "./a.out " + cf
